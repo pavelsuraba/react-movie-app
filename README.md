@@ -1,4 +1,5 @@
-# React devstack
+# React movie app
+React/redux - proof of concept.
 
 ### Version
 1.0.0

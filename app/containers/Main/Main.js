@@ -1,31 +1,38 @@
 import React, { Component } from 'react';
-import Greeting from 'components/Greeting/Greeting';
-import Logo from 'components/Logo/Logo';
-import styled from 'styled-components';
+import { initialFetch } from '../../actions/fetchActions';
+import { connect } from 'react-redux';
+import Loader from 'components/Loader/Loader';
 
-const Container = styled.div`
-    display: flex;
-    align-items: center;
-    flex-direction: column;
-`;
+const mapStateToProps = ({ loadingReducer, movieReducer }) => {
+    return {
+        isLoading: loadingReducer.isLoading,
+        popularMovies: movieReducer.popularMovies
+    };
+};
 
-const GreetingContext = styled.div`
-    margin: 0 0 10px 0;
-`;
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchData: () => {
+            dispatch(initialFetch());
+        }
+    };
+};
 
-export default class Main extends Component {
-    constructor() {
-        super();
+class Main extends Component {
+    constructor(props) {
+        super(props);
+    }
+    componentDidMount() {
+        this.props.fetchData();
     }
     render() {
+        console.log('render');
         return (
-            <Container>
-                <GreetingContext>
-                    <Greeting/>
-                </GreetingContext>
-                <Logo large/>
-                <img src={require('_assets/jpg/image.jpg')} width="70px" height="70px" alt=""/>
-            </Container>
+            <div>
+                { this.props.isLoading ? <Loader /> : <p>Movies</p> }
+            </div>
         );
     }
 }
+
+export default connect(mapStateToProps,mapDispatchToProps)(Main);
